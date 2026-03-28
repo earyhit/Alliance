@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vermillion Imperium | Entry Portal</title>
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --accent: #f43f5e;
+            --bg: #020617;
+            --glass: rgba(15, 23, 42, 0.95);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--bg);
+            color: #f1f5f9;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        /* TACTICAL GRID OVERLAY */
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 100% 4px, 40px 40px, 40px 40px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* GLITCH HEADER */
+        .logo-container h1 {
+            font-size: clamp(2.5rem, 12vw, 7rem);
+            margin: 0;
+            letter-spacing: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .tagline {
+            color: var(--primary);
+            letter-spacing: 8px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* BUTTONS */
+        .actions {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 16px 45px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: transparent;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn.main {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* NEWS TICKER */
+        .ticker-wrap {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(2, 6, 23, 0.9);
+            border-top: 1px solid var(--primary);
+            padding: 12px 0;
+            z-index: 100;
+        }
+
+        .ticker {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+        }
+
+        .ticker-item {
+            padding: 0 50px;
+            font-family: monospace;
+            color: var(--primary);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .coord-display {
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            font-family: monospace;
+            font-size: 0.6rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="logo-container">
+        <p class="tagline">The Vermillion Imperium</p>
+        <h1>COALITION</h1>
+    </div>
+
+    <div class="actions">
+        <a href="https://discord.gg/pdr2BM9f6r" class="btn main">Establish Uplink</a>
+        <a href="https://github.com" class="btn">Archives</a>
+    </div>
+</div>
+
+<div class="coord-display">
+    LAT: 26.4499° N <br>
+    LNG: 80.3319° E <br>
+    STATUS: SECURE
+</div>
+
+<div class="ticker-wrap">
+    <div class="ticker">
+        <div class="ticker-item">[INFO] NEW DISCORD GATEWAY ESTABLISHED</div>
+        <div class="ticker-item">[NEWS] COALITION PROTOCOLS UPDATED</div>
+        <div class="ticker-item">[ALERT] FACTION LEADERS MUST VERIFY STATUS</div>
+        <div class="ticker-item">[INFO] ALLIANCE JOURNALISM SERVICES ONLINE</div>
+        <div class="ticker-item">[STRENGTH] UNIFIED FOR THE IMPERIUM</div>
+    </div>
+</div>
+
+</body>
+</html>
