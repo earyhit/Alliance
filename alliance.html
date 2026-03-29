@@ -3,35 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unified Strategic Portal</title>
+    <title>Alliance Strategic Portal | Unified Interface</title>
     <style>
         :root {
-            /* Neutral "Grey Market" Palette */
-            --primary: #94a3b8;    /* Steel Blue/Grey */
-            --accent: #64748b;     /* Slate */
-            --bg: #0f172a;         /* Dark Space */
-            --glass: rgba(30, 41, 59, 0.7);
+            --primary: #94a3b8;
+            --accent: #64748b;
+            --bg: #020617;
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
             background-color: var(--bg);
-            color: #e2e8f0;
-            font-family: 'Courier New', monospace; /* More "Anonymous" feel */
+            color: #f1f5f9;
+            font-family: 'Courier New', monospace;
             overflow: hidden;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
 
-        /* TACTICAL GRID - Now Neutral */
-        body::before {
-            content: " ";
+        /* LIVE PERSONNEL BADGE */
+        .personnel-badge {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 50%),
-                linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-            background-size: 100% 2px, 50px 50px;
-            z-index: 1;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border: 1px solid var(--accent);
+            background: rgba(15, 23, 42, 0.8);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(100, 116, 139, 0.2);
         }
+
+        #member-count { color: #10b981; font-weight: bold; text-shadow: 0 0 5px #10b981; }
 
         .hero {
             height: 100vh;
@@ -41,83 +45,108 @@
             align-items: center;
             text-align: center;
             z-index: 2;
-            position: relative;
         }
 
-        /* NEUTRAL HEADER */
-        .logo-container h1 {
-            font-size: clamp(2rem, 8vw, 5rem);
+        .status-header {
+            letter-spacing: 8px;
+            font-size: 0.65rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 12vw, 6rem);
             margin: 0;
-            letter-spacing: 20px;
-            font-weight: 200; /* Thinner, more modern font */
+            letter-spacing: 15px;
             text-transform: uppercase;
             border-top: 1px solid var(--primary);
             border-bottom: 1px solid var(--primary);
-            padding: 20px 0;
-        }
-
-        .tagline {
+            padding: 25px 0;
             color: var(--primary);
-            letter-spacing: 10px;
-            margin-top: 20px;
-            font-size: 0.7rem;
+            font-weight: 200;
         }
-
-        /* ACTION BUTTONS */
-        .actions { display: flex; gap: 15px; margin-top: 50px; }
 
         .btn {
-            padding: 12px 30px;
+            margin-top: 50px;
+            padding: 15px 45px;
             border: 1px solid var(--primary);
             color: var(--primary);
             text-decoration: none;
             text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            transition: 0.3s;
+            letter-spacing: 4px;
+            transition: 0.4s;
+            display: inline-block;
             background: rgba(148, 163, 184, 0.05);
         }
 
         .btn:hover {
             background: var(--primary);
             color: var(--bg);
-            box-shadow: 0 0 20px rgba(148, 163, 184, 0.3);
+            box-shadow: 0 0 30px rgba(148, 163, 184, 0.4);
         }
 
-        /* ANONYMOUS TICKER */
+        /* TICKER BAR */
         .ticker-wrap {
             position: fixed; bottom: 0; width: 100%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(2, 6, 23, 0.95);
             border-top: 1px solid var(--accent);
-            padding: 8px 0;
+            padding: 10px 0;
         }
-        .ticker { display: flex; white-space: nowrap; animation: ticker 40s linear infinite; }
-        .ticker-item { padding: 0 60px; color: var(--accent); font-size: 0.7rem; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .ticker { display: flex; white-space: nowrap; animation: scroll 35s linear infinite; }
+        .ticker-item { padding: 0 50px; color: var(--accent); font-size: 0.75rem; }
+
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
 <body>
 
-<div class="hero">
-    <div class="logo-container">
-        <h1>COALITION</h1>
-        <p class="tagline">UNIFIED STRATEGIC INTERFACE</p>
-    </div>
+<div class="personnel-badge">
+    ACTIVE PERSONNEL: <span id="member-count">CONNECTING...</span>
+</div>
 
-    <div class="actions">
-        <a href="https://discord.gg/pdr2BM9f6r" class="btn">Establish Uplink</a>
-        <a href="#" class="btn" onclick="alert('Accessing Central Database...')">Intelligence</a>
-    </div>
+<div class="hero">
+    <div class="status-header">SYSTEM READY // UPLINK SECURE</div>
+    <h1>COALITION</h1>
+    <a href="https://discord.gg/pdr2BM9f6r" class="btn">ENTER TERMINAL</a>
 </div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <div class="ticker-item">:: NEUTRAL ZONE ESTABLISHED ::</div>
-        <div class="ticker-item">:: ENCRYPTION PROTOCOL: ACTIVE ::</div>
-        <div class="ticker-item">:: AWAITING FACTION INPUT ::</div>
-        <div class="ticker-item">:: ALLIANCE JOURNALISM FEED: READY ::</div>
+        <div class="ticker-item">:: [SYSTEM] UPLINK ESTABLISHED: ALLIANCE PORTAL v4.0 ::</div>
+        <div class="ticker-item">:: [INTEL] COALITION NEUTRAL ZONE ACTIVE ::</div>
+        <div class="ticker-item">:: [STATUS] ENCRYPTION LEVEL: MAXIMUM ::</div>
+        <div class="ticker-item">:: [BROADCAST] THE VERMILLION IMPERIUM DEPLOYS STRATEGIC INTERFACE ::</div>
     </div>
 </div>
+
+<script>
+    // Targeted Server ID for The Vermillion Imperium / Coalition
+    const serverID = '1485604031240863785'; 
+
+    async function updateMembers() {
+        try {
+            // Fetching data from the Discord Widget API
+            const response = await fetch(`https://discord.com/api/guilds/${serverID}/widget.json`);
+            const data = await response.json();
+            
+            // data.presence_count shows how many people are currently online/active
+            document.getElementById('member-count').innerText = data.presence_count;
+        } catch (error) {
+            console.error("Uplink Error:", error);
+            document.getElementById('member-count').innerText = "ERROR";
+        }
+    }
+
+    // Run once on load
+    updateMembers();
+    // Refresh every 30 seconds to keep the count live
+    setInterval(updateMembers, 30000);
+</script>
 
 </body>
 </html>
