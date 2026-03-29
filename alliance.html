@@ -3,37 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Vermillion Imperium | Entry Portal</title>
+    <title>Unified Strategic Portal</title>
     <style>
         :root {
-            --primary: #38bdf8;
-            --accent: #f43f5e;
-            --bg: #020617;
-            --glass: rgba(15, 23, 42, 0.95);
+            /* Neutral "Grey Market" Palette */
+            --primary: #94a3b8;    /* Steel Blue/Grey */
+            --accent: #64748b;     /* Slate */
+            --bg: #0f172a;         /* Dark Space */
+            --glass: rgba(30, 41, 59, 0.7);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            margin: 0; padding: 0; height: 100%;
             background-color: var(--bg);
-            color: #f1f5f9;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace; /* More "Anonymous" feel */
             overflow: hidden;
         }
 
-        /* TACTICAL GRID OVERLAY */
+        /* TACTICAL GRID - Now Neutral */
         body::before {
             content: " ";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-            background-size: 100% 4px, 40px 40px, 40px 40px;
+                linear-gradient(rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.4) 50%),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+            background-size: 100% 2px, 50px 50px;
             z-index: 1;
-            pointer-events: none;
         }
 
         .hero {
@@ -43,131 +40,82 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            position: relative;
             z-index: 2;
+            position: relative;
         }
 
-        /* GLITCH HEADER */
+        /* NEUTRAL HEADER */
         .logo-container h1 {
-            font-size: clamp(2.5rem, 12vw, 7rem);
+            font-size: clamp(2rem, 8vw, 5rem);
             margin: 0;
-            letter-spacing: 12px;
-            font-weight: 900;
+            letter-spacing: 20px;
+            font-weight: 200; /* Thinner, more modern font */
             text-transform: uppercase;
-            color: white;
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            border-top: 1px solid var(--primary);
+            border-bottom: 1px solid var(--primary);
+            padding: 20px 0;
         }
 
         .tagline {
             color: var(--primary);
-            letter-spacing: 8px;
-            font-weight: bold;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            opacity: 0.8;
+            letter-spacing: 10px;
+            margin-top: 20px;
+            font-size: 0.7rem;
         }
 
-        /* BUTTONS */
-        .actions {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        /* ACTION BUTTONS */
+        .actions { display: flex; gap: 15px; margin-top: 50px; }
 
         .btn {
-            padding: 16px 45px;
+            padding: 12px 30px;
             border: 1px solid var(--primary);
             color: var(--primary);
             text-decoration: none;
-            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: transparent;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            background: rgba(148, 163, 184, 0.05);
         }
 
         .btn:hover {
             background: var(--primary);
             color: var(--bg);
-            box-shadow: 0 0 40px rgba(56, 189, 248, 0.6);
-            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(148, 163, 184, 0.3);
         }
 
-        .btn.main {
-            background: rgba(56, 189, 248, 0.1);
-        }
-
-        /* NEWS TICKER */
+        /* ANONYMOUS TICKER */
         .ticker-wrap {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(2, 6, 23, 0.9);
-            border-top: 1px solid var(--primary);
-            padding: 12px 0;
-            z-index: 100;
+            position: fixed; bottom: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid var(--accent);
+            padding: 8px 0;
         }
-
-        .ticker {
-            display: flex;
-            white-space: nowrap;
-            animation: ticker 25s linear infinite;
-        }
-
-        .ticker-item {
-            padding: 0 50px;
-            font-family: monospace;
-            color: var(--primary);
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-        }
-
-        @keyframes ticker {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .coord-display {
-            position: absolute;
-            bottom: 60px;
-            left: 20px;
-            font-family: monospace;
-            font-size: 0.6rem;
-            color: var(--primary);
-            opacity: 0.5;
-        }
+        .ticker { display: flex; white-space: nowrap; animation: ticker 40s linear infinite; }
+        .ticker-item { padding: 0 60px; color: var(--accent); font-size: 0.7rem; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
 <div class="hero">
     <div class="logo-container">
-        <p class="tagline">The Vermillion Imperium</p>
         <h1>COALITION</h1>
+        <p class="tagline">UNIFIED STRATEGIC INTERFACE</p>
     </div>
 
     <div class="actions">
-        <a href="https://discord.gg/pdr2BM9f6r" class="btn main">Establish Uplink</a>
-        <a href="https://github.com" class="btn">Archives</a>
+        <a href="https://discord.gg/pdr2BM9f6r" class="btn">Establish Uplink</a>
+        <a href="#" class="btn" onclick="alert('Accessing Central Database...')">Intelligence</a>
     </div>
-</div>
-
-<div class="coord-display">
-    LAT: 26.4499° N <br>
-    LNG: 80.3319° E <br>
-    STATUS: SECURE
 </div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <div class="ticker-item">[INFO] NEW DISCORD GATEWAY ESTABLISHED</div>
-        <div class="ticker-item">[NEWS] COALITION PROTOCOLS UPDATED</div>
-        <div class="ticker-item">[ALERT] FACTION LEADERS MUST VERIFY STATUS</div>
-        <div class="ticker-item">[INFO] ALLIANCE JOURNALISM SERVICES ONLINE</div>
-        <div class="ticker-item">[STRENGTH] UNIFIED FOR THE IMPERIUM</div>
+        <div class="ticker-item">:: NEUTRAL ZONE ESTABLISHED ::</div>
+        <div class="ticker-item">:: ENCRYPTION PROTOCOL: ACTIVE ::</div>
+        <div class="ticker-item">:: AWAITING FACTION INPUT ::</div>
+        <div class="ticker-item">:: ALLIANCE JOURNALISM FEED: READY ::</div>
     </div>
 </div>
 
