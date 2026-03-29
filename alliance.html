@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coalition | Tactical Interface</title>
+    <title>Coalition | Tactical Interface v4.5</title>
     <style>
         :root {
-            --primary: #94a3b8;
-            --accent: #10b981; /* Tactical Green */
-            --bg: #020617;
-            --glitch: #ef4444;
+            --primary: #94a3b8;    /* Steel Grey */
+            --accent: #10b981;     /* Tactical Green */
+            --bg: #020617;         /* Deep Space Blue */
+            --noise: rgba(16, 185, 129, 0.015); /* Subtlest Green Noise */
         }
 
         body, html {
@@ -18,157 +18,197 @@
             color: #f1f5f9;
             font-family: 'Courier New', monospace;
             overflow: hidden;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        /* RADAR CONTAINER */
+        /* EFFECT LAYER 1: UNSTABLE BACKGROUND NOISE */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at center, #0f172a 0%, #020617 100%),
+                repeating-linear-gradient(0deg, transparent 0px, transparent 1px, rgba(16, 185, 129, 0.01) 1px, rgba(16, 185, 129, 0.01) 2px);
+            z-index: 1;
+            opacity: 0.95;
+            animation: backgroundFlicker 8s infinite ease-in-out;
+        }
+
+        /* EFFECT LAYER 2: MOVING SCAN-LINE GLITCH (Moves UNDER text) */
+        .glitch-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(16, 185, 129, 0.03) 50%),
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.01));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 2;
+            pointer-events: none;
+            animation: scanline 6s linear infinite;
+        }
+
+        /* RADAR SYSTEM (Visual Only, moves UNDER text) */
         .radar-bg {
             position: fixed;
             top: 50%; left: 50%;
             width: 800px; height: 800px;
             transform: translate(-50%, -50%);
-            border: 1px solid rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.08);
             border-radius: 50%;
-            z-index: 0;
+            z-index: 3;
             pointer-events: none;
         }
 
-        /* RADAR SWEEP LINE */
         .radar-sweep {
             position: absolute;
             top: 50%; left: 50%;
             width: 400px; height: 400px;
-            background: conic-gradient(from 0deg, rgba(16, 185, 129, 0.2) 0%, transparent 25%);
+            background: conic-gradient(from 0deg, rgba(16, 185, 129, 0.15) 0%, transparent 20%);
             transform-origin: top left;
-            animation: rotate 4s linear infinite;
+            animation: rotateRadar 5s linear infinite;
         }
 
-        /* PULSING RADAR BLIPS */
+        /* PULSING RADAR BLIPS (Under Text) */
         .blip {
             position: absolute;
-            width: 8px; height: 8px;
+            width: 6px; height: 6px;
             background: var(--accent);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--accent);
-            animation: ping 4s ease-out infinite;
+            animation: ping 5s ease-out infinite;
             opacity: 0;
         }
 
-        /* SCAN LINES EFFECT */
-        body::after {
-            content: " ";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 4px, 3px 100%;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        @keyframes ping {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0; transform: scale(1.5); }
-        }
-
-        /* PERSONNEL BADGE */
-        .personnel-badge {
-            position: fixed; top: 20px; right: 20px;
-            padding: 10px 20px;
-            border: 1px solid var(--accent);
-            background: rgba(2, 6, 23, 0.9);
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        #member-count { color: var(--accent); font-weight: bold; }
-
+        /* MAIN CONTENT HERO (Z-index high so text is SOLID) */
         .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
             z-index: 10;
             position: relative;
+        }
+
+        .status-header {
+            letter-spacing: 10px;
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
         h1 {
             font-size: clamp(2.5rem, 12vw, 6rem);
             margin: 0;
-            letter-spacing: 15px;
+            letter-spacing: 20px;
             text-transform: uppercase;
             border-top: 1px solid var(--primary);
             border-bottom: 1px solid var(--primary);
-            padding: 25px 0;
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            padding: 30px 0;
+            color: var(--primary);
             font-weight: 200;
+            /* Text stays 100% steady */
         }
 
+        .btn-container { margin-top: 60px; }
+
         .btn {
-            margin-top: 50px;
-            padding: 15px 45px;
+            padding: 18px 50px;
             border: 1px solid var(--accent);
             color: var(--accent);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            transition: 0.4s;
-            display: inline-block;
-            background: rgba(16, 185, 129, 0.05);
+            font-size: 0.9rem;
+            letter-spacing: 5px;
             font-weight: bold;
+            transition: all 0.3s ease;
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .btn:hover {
             background: var(--accent);
             color: var(--bg);
             box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
         }
 
+        /* LIVE PERSONNEL BADGE (Steady) */
+        .personnel-badge {
+            position: fixed; top: 25px; right: 25px;
+            padding: 10px 20px;
+            border: 1px solid var(--accent);
+            background: rgba(15, 23, 42, 0.8);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        #member-count { color: #10b981; font-weight: bold; }
+
+        /* TICKER BAR (Steady) */
         .ticker-wrap {
             position: fixed; bottom: 0; width: 100%;
             background: rgba(2, 6, 23, 0.95);
             border-top: 1px solid var(--accent);
-            padding: 10px 0;
+            padding: 12px 0;
             z-index: 20;
         }
 
-        .ticker { display: flex; white-space: nowrap; animation: scroll 35s linear infinite; }
-        .ticker-item { padding: 0 50px; color: var(--accent); font-size: 0.75rem; }
+        .ticker { display: flex; white-space: nowrap; animation: scrollTicker 35s linear infinite; }
+        .ticker-item { padding: 0 50px; color: var(--accent); font-size: 0.8rem; letter-spacing: 2px; }
 
-        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        /* KEYFRAMES (The engine for the glitch and movement) */
+        
+        @keyframes scrollTicker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes rotateRadar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes ping { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(1.3); } }
+        
+        /* The main "stable flicker" for the screen */
+        @keyframes backgroundFlicker {
+            0%, 100% { opacity: 0.95; }
+            10.1% { opacity: 0.98; }
+            10.2% { opacity: 0.90; }
+            10.3% { opacity: 0.99; }
+            30.1% { opacity: 0.95; }
+            30.2% { opacity: 0.91; }
+            30.3% { opacity: 0.97; }
+        }
+
+        /* The glitch-line that scans the screen UNDER the text */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); opacity: 1; }
+            95% { transform: translateY(100%); opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
+<div class="glitch-layer"></div>
+
 <div class="radar-bg">
     <div class="radar-sweep"></div>
-    <div class="blip" style="top: 20%; left: 30%;"></div>
-    <div class="blip" style="top: 60%; left: 70%; animation-delay: 1s;"></div>
-    <div class="blip" style="top: 40%; left: 10%; animation-delay: 2.5s;"></div>
+    <div class="blip" style="top: 25%; left: 35%;"></div>
+    <div class="blip" style="top: 65%; left: 75%; animation-delay: 1.5s;"></div>
+    <div class="blip" style="top: 45%; left: 15%; animation-delay: 3s;"></div>
 </div>
 
 <div class="personnel-badge">
-    ACTIVE PERSONNEL: <span id="member-count">CONNECTING...</span>
+    ACTIVE PERSONNEL: <span id="member-count">LOADING...</span>
 </div>
 
 <div class="hero">
-    <div style="letter-spacing: 8px; font-size: 0.65rem; color: var(--accent); margin-bottom: 15px;">SATCOM ACTIVE // COALITION LINK SECURE</div>
+    <div class="status-header">SYSTEM READY // UPLINK SECURE</div>
     <h1>COALITION</h1>
-    <a href="https://discord.gg/pdr2BM9f6r" class="btn">ENTER TERMINAL</a>
+    
+    <div class="btn-container">
+        <a href="https://discord.gg/pdr2BM9f6r" class="btn">ENTER TERMINAL</a>
+    </div>
 </div>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <div class="ticker-item">:: [SYSTEM] TACTICAL UPLINK ESTABLISHED ::</div>
+        <div class="ticker-item">:: [SYSTEM] TACTICAL UPLINK ESTABLISHED v4.5 ::</div>
         <div class="ticker-item">:: [INTEL] COALITION NEUTRAL ZONE ACTIVE ::</div>
         <div class="ticker-item">:: [STATUS] ENCRYPTION LEVEL: MAXIMUM ::</div>
         <div class="ticker-item">:: [RADAR] SCANNING FOR HOSTILES... ::</div>
@@ -176,18 +216,22 @@
 </div>
 
 <script>
+    // Replace with your specific Server ID to get the live count
     const serverID = '1485604031240863785'; 
 
     async function updateMembers() {
         try {
             const response = await fetch(`https://discord.com/api/guilds/${serverID}/widget.json`);
             const data = await response.json();
+            // This pulls the count of people who are "Online" or "Idle"
             document.getElementById('member-count').innerText = data.presence_count;
         } catch (error) {
+            console.error("Widget Error:", error);
             document.getElementById('member-count').innerText = "ERROR";
         }
     }
 
+    // Run once immediately, then every 30 seconds
     updateMembers();
     setInterval(updateMembers, 30000);
 </script>
