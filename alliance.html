@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coalition | Tactical Interface v5.0</title>
+    <title>Coalition | Tactical Interface v5.1</title>
     <style>
         :root {
             --primary: #94a3b8;    /* Steel Grey */
             --accent: #10b981;     /* Tactical Green */
             --bg: #020617;         /* Deep Space Blue */
             --glitch: #ef4444;     /* Emergency Red */
+            --glow: rgba(16, 185, 129, 0.3);
         }
 
         body, html {
@@ -22,7 +23,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            cursor: crosshair; /* Tactical Crosshair Cursor */
+            cursor: crosshair;
         }
 
         /* --- BACKGROUND LAYER: FLICKERING GRID & NOISE --- */
@@ -32,18 +33,20 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: 
                 radial-gradient(circle at center, #0f172a 0%, #020617 100%),
-                repeating-linear-gradient(0deg, transparent 0px, transparent 1px, rgba(16, 185, 129, 0.01) 1px, rgba(16, 185, 129, 0.01) 2px);
+                repeating-linear-gradient(0deg, transparent 0px, transparent 1px, rgba(16, 185, 129, 0.015) 1px, rgba(16, 185, 129, 0.015) 2px);
             z-index: 1;
             animation: screenFlicker 10s infinite ease-in-out;
+            pointer-events: none;
         }
 
-        /* --- RADAR SYSTEM (Moves UNDER text) --- */
+        /* --- RADAR SYSTEM --- */
         .radar-container {
             position: fixed;
             top: 50%; left: 50%;
-            width: 850px; height: 850px;
+            width: 85vw; height: 85vw;
+            max-width: 900px; max-height: 900px;
             transform: translate(-50%, -50%);
-            border: 1px solid rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.08);
             border-radius: 50%;
             z-index: 2;
             pointer-events: none;
@@ -52,8 +55,8 @@
         .radar-sweep {
             position: absolute;
             top: 50%; left: 50%;
-            width: 425px; height: 425px;
-            background: conic-gradient(from 0deg, rgba(16, 185, 129, 0.2) 0%, transparent 20%);
+            width: 50%; height: 50%;
+            background: conic-gradient(from 0deg, var(--glow) 0%, transparent 25%);
             transform-origin: top left;
             animation: rotateRadar 4s linear infinite;
         }
@@ -63,75 +66,81 @@
             width: 6px; height: 6px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
-            animation: ping 4s ease-out infinite;
+            box-shadow: 0 0 12px var(--accent);
             opacity: 0;
+            animation: ping 4s ease-out infinite;
         }
 
-        /* --- SCANLINE GLITCH EFFECT --- */
+        /* --- SCANLINE GLITCH --- */
         .scanline {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 4px;
+            top: 0; left: 0; width: 100%; height: 2px;
             background: rgba(16, 185, 129, 0.1);
             z-index: 3;
-            opacity: 0.5;
             pointer-events: none;
-            animation: scanMove 8s linear infinite;
+            animation: scanMove 12s linear infinite;
         }
 
-        /* --- TOP DATA BADGE --- */
+        /* --- DATA DISPLAYS --- */
         .personnel-badge {
             position: fixed; top: 25px; right: 25px;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: 1px solid var(--accent);
             background: rgba(15, 23, 42, 0.9);
             font-size: 0.75rem;
             letter-spacing: 3px;
             z-index: 100;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
+            transition: all 0.5s ease;
         }
 
-        #member-count { color: var(--accent); font-weight: bold; text-shadow: 0 0 8px var(--accent); }
+        #member-count { 
+            color: var(--accent); 
+            font-weight: bold; 
+            text-shadow: 0 0 8px var(--accent); 
+        }
 
-        /* --- COORDINATES (Bottom Left) --- */
         .coords {
-            position: fixed; bottom: 70px; left: 25px;
+            position: fixed; bottom: 80px; left: 25px;
             text-align: left;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: var(--accent);
-            opacity: 0.4;
+            opacity: 0.5;
             letter-spacing: 2px;
             z-index: 100;
-            line-height: 1.5;
+            line-height: 1.6;
+            pointer-events: none;
         }
 
-        /* --- MAIN HERO CONTENT --- */
+        /* --- MAIN CONTENT --- */
         .hero { z-index: 50; position: relative; }
 
         .status-header {
             letter-spacing: 12px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--accent);
             margin-bottom: 25px;
             text-transform: uppercase;
+            text-shadow: 0 0 5px var(--glow);
             opacity: 0.8;
         }
 
         h1 {
-            font-size: clamp(2.5rem, 12vw, 6.5rem);
+            font-size: clamp(2.5rem, 10vw, 6rem);
             margin: 0;
-            letter-spacing: 20px;
+            letter-spacing: 22px;
             text-transform: uppercase;
             border-top: 1px solid var(--primary);
             border-bottom: 1px solid var(--primary);
-            padding: 30px 0;
+            padding: 35px 0;
             color: var(--primary);
             font-weight: 200;
+            text-shadow: 0 0 15px rgba(148, 163, 184, 0.2);
         }
 
         .btn {
-            margin-top: 60px;
-            padding: 18px 55px;
+            margin-top: 65px;
+            padding: 20px 60px;
             border: 1px solid var(--accent);
             color: var(--accent);
             text-decoration: none;
@@ -139,44 +148,49 @@
             font-size: 1rem;
             letter-spacing: 6px;
             font-weight: bold;
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-block;
-            background: rgba(16, 185, 129, 0.03);
+            background: rgba(16, 185, 129, 0.04);
             backdrop-filter: blur(10px);
         }
 
         .btn:hover {
             background: var(--accent);
             color: var(--bg);
-            box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
-            cursor: cell;
+            box-shadow: 0 0 60px rgba(16, 185, 129, 0.6);
+            transform: scale(1.02);
         }
 
-        /* --- TICKER BAR --- */
+        /* --- TICKER --- */
         .ticker-wrap {
             position: fixed; bottom: 0; width: 100%;
             background: rgba(2, 6, 23, 0.98);
             border-top: 1px solid var(--accent);
-            padding: 12px 0;
+            padding: 14px 0;
             z-index: 100;
         }
 
-        .ticker { display: flex; white-space: nowrap; animation: scrollTicker 40s linear infinite; }
-        .ticker-item { padding: 0 60px; color: var(--accent); font-size: 0.8rem; letter-spacing: 3px; }
+        .ticker { display: flex; white-space: nowrap; animation: scrollTicker 45s linear infinite; }
+        .ticker-item { padding: 0 60px; color: var(--accent); font-size: 0.8rem; letter-spacing: 3px; opacity: 0.7; }
 
         /* --- ANIMATIONS --- */
         @keyframes scrollTicker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
         @keyframes rotateRadar { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes ping { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(1.4); } }
-        @keyframes scanMove { 0% { top: -5%; } 100% { top: 105%; } }
+        @keyframes scanMove { 0% { top: -10%; } 100% { top: 110%; } }
+        
+        @keyframes ping { 
+            0% { opacity: 0; transform: scale(0.5); } 
+            10% { opacity: 1; }
+            50% { opacity: 0.5; transform: scale(1.1); } 
+            100% { opacity: 0; transform: scale(1.4); } 
+        }
+
         @keyframes screenFlicker {
             0%, 100% { opacity: 1; }
-            30% { opacity: 0.97; }
-            30.1% { opacity: 0.92; }
-            30.2% { opacity: 0.98; }
-            80% { opacity: 0.99; }
-            80.1% { opacity: 0.94; }
-            80.2% { opacity: 0.99; }
+            30.1% { opacity: 0.94; }
+            30.2% { opacity: 0.99; }
+            80.1% { opacity: 0.96; }
+            80.2% { opacity: 1; }
         }
     </style>
 </head>
@@ -186,36 +200,38 @@
 
 <div class="radar-container">
     <div class="radar-sweep"></div>
-    <div class="blip" style="top: 20%; left: 40%;"></div>
-    <div class="blip" style="top: 70%; left: 60%; animation-delay: 1.2s;"></div>
-    <div class="blip" style="top: 40%; left: 80%; animation-delay: 2.8s;"></div>
+    <div class="blip" style="top: 25%; left: 45%; animation-delay: 0.5s;"></div>
+    <div class="blip" style="top: 65%; left: 65%; animation-delay: 1.8s;"></div>
+    <div class="blip" style="top: 35%; left: 85%; animation-delay: 3.2s;"></div>
+    <div class="blip" style="top: 80%; left: 20%; animation-delay: 2.1s;"></div>
 </div>
 
-<div class="personnel-badge">
-    ACTIVE PERSONNEL: <span id="member-count">...</span>
-</div>
+<header class="personnel-badge">
+    ACTIVE PERSONNEL: <span id="member-count">SYNCING...</span>
+</header>
 
-<div class="coords">
+<aside class="coords">
     LOC_EST: 26.4499° N, 80.3319° E<br>
     STATUS: UPLINK_STABLE<br>
-    ENC: RSA_4096_ACTIVE<br>
-    NET: SAT_COM_7
-</div>
+    ENC: RSA_4096_PRO<br>
+    NET: SAT_COM_PRIMARY
+</aside>
 
-<div class="hero">
+<main class="hero">
     <div class="status-header">SYSTEM READY // UPLINK SECURE</div>
     <h1>COALITION</h1>
     <a href="https://discord.gg/pdr2BM9f6r" class="btn">ENTER TERMINAL</a>
-</div>
+</main>
 
-<div class="ticker-wrap">
+<footer class="ticker-wrap">
     <div class="ticker">
-        <div class="ticker-item">:: [SYSTEM] TACTICAL UPLINK ESTABLISHED v5.0 ::</div>
+        <div class="ticker-item">:: [SYSTEM] TACTICAL UPLINK v5.1 ::</div>
         <div class="ticker-item">:: [INTEL] COALITION NEUTRAL ZONE ACTIVE ::</div>
-        <div class="ticker-item">:: [STATUS] ENCRYPTION LEVEL: MAXIMUM ::</div>
+        <div class="ticker-item">:: [STATUS] ENCRYPTION: MAXIMUM ::</div>
         <div class="ticker-item">:: [RADAR] SCANNING FOR HOSTILE SIGNATURES... ::</div>
+        <div class="ticker-item">:: [NOTICE] ALL COMMANDERS REPORT TO GATEWAY ::</div>
     </div>
-</div>
+</footer>
 
 <script>
     const serverID = '1485604031240863785'; 
@@ -223,14 +239,25 @@
     async function updateMembers() {
         try {
             const response = await fetch(`https://discord.com/api/guilds/${serverID}/widget.json`);
+            if (!response.ok) throw new Error('Network error');
             const data = await response.json();
-            document.getElementById('member-count').innerText = data.presence_count || "0";
+            
+            const countElement = document.getElementById('member-count');
+            countElement.style.opacity = 0; // Fade out
+            
+            setTimeout(() => {
+                countElement.innerText = data.presence_count ?? "0";
+                countElement.style.opacity = 1; // Fade in
+            }, 300);
+
         } catch (error) {
             document.getElementById('member-count').innerText = "OFFLINE";
         }
     }
 
+    // Initial fetch
     updateMembers();
+    // Refresh interval set to 30s to respect Discord API limits
     setInterval(updateMembers, 30000);
 </script>
 
